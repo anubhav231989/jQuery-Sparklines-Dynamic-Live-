@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>JQuery Sparkline Live</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="http://omnipotent.net/jquery.sparkline/2.1.2/jquery.sparkline.js"></script>
+	</head>
+	<body>
+
+	<script>
+	$(function() {
+
+		var sparklineDuration = 30; //seconds - value stay in view for how long
+		var valuesList = [0]; // list of values
+		var randonNumber = 0; // random no should be replace with real value
+		var sparklinePulsTime = 1000; //every second - how frequent to update line
+
+
+	    var sparklineLeadLine = function() {
+	        $('#jq-sparkline-live').sparkline(valuesList, {
+	            type: 'line',
+	            width: '100%',
+	            height: '50'
+	        });
+	    }
+
+	    window.setInterval(function(){
+	        randonNumber = Math.round((Math.random() * 15) + 1 ); // random value
+	        valuesList.push( randonNumber );
+	        valuesList = updateValueList(valuesList, sparklineDuration);
+	        sparklineLeadLine();
+	    }, sparklinePulsTime);
+
+
+	    var refreshSparklines;
+	    $(window).resize(function(e) {
+	        clearTimeout(refreshSparklines);
+	        refreshSparklines = setTimeout(sparklineLeadLine, 500);
+	    });
+	    sparklineLeadLine();
+
+	})
+
+
+	function updateValueList(valuesList, sparklineDuration) {
+
+	    if(valuesList.length > sparklineDuration) {
+	        return valuesList.slice(valuesList.length - sparklineDuration,valuesList.length);
+	    }
+
+	    return valuesList;
+	}
+
+	</script>
+
+	<p>JQuery Sparkline Live</p>
+	<div style="width:100%" id="jq-sparkline-live"></div>
+
+	</body>
+</html>
